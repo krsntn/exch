@@ -16,7 +16,7 @@ You cannot compare these numbers by looking at them. This app converts both quot
 
 ## Features
 
-- Compares two quotes for any pair of currencies.
+- Compares two quotes for any pair of currencies. Each currency field is a dropdown of 22 common travel currencies. You can type a code or a name to filter the list, or type any other 3-letter code and tap **Use this code**.
 - You type each quote exactly as you see it, in any direction.
 - Shows the rate of each quote, the better quote, and the difference in money and percent.
 - Shows the total you get from each quote for the amount you plan to exchange.
@@ -71,6 +71,7 @@ node --test
 | `app.js` | The Compare page logic |
 | `convert.js` | The Convert page logic |
 | `shared.js` | Saved values and number formats used by both pages |
+| `currency-picker.js` | The currency dropdown used by every currency field |
 | `compare.js` | The rate and price math. It has no page code, so Node can test it. |
 | `compare.test.js` | Unit tests for `compare.js` |
 | `CONTEXT.md` | Glossary of the terms the project uses |

@@ -305,3 +305,70 @@ button {
 }
 
 .custom { margin-top: 12px; }
+
+/* Currency picker (currency-picker.js) */
+.picker { position: relative; }
+
+.picker .currency-input { padding-right: 36px; }
+
+.picker-toggle {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  width: 32px;
+  height: 32px;
+  transform: translateY(-50%);
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+}
+
+.picker-list {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 4px);
+  left: 0;
+  width: max-content;
+  min-width: 100%;
+  max-width: min(320px, calc(100vw - 32px));
+  max-height: 280px;
+  margin: 0;
+  padding: 4px;
+  overflow-y: auto;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.picker-list.align-right { left: auto; right: 0; }
+
+.picker-option {
+  display: flex;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.picker-option:hover,
+.picker-option[aria-selected="true"] { background: var(--bg); }
+
+.picker-code {
+  flex: none;
+  width: 3.2em;
+  font-weight: 600;
+}
+
+.picker-name {
+  overflow: hidden;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.picker-empty {
+  padding: 8px 10px;
+  color: var(--muted);
+}
