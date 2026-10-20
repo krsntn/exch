@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111317">
+  <title>Price Converter</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <nav class="nav">
+      <a href="index.html">Compare</a>
+      <a href="convert.html" aria-current="page">Convert</a>
+    </nav>
+
+    <header class="top">
+      <h1>How much is it?</h1>
+    </header>
+
+    <section class="price-panel">
+      <label for="price" class="total-label">Price</label>
+      <div class="row">
+        <input id="price" class="amount price-input" inputmode="decimal" placeholder="0" autofocus autocomplete="off">
+        <span id="price-currency" class="unit"></span>
+      </div>
+      <p id="price-error" class="error" hidden></p>
+      <p id="home-cost" class="home-cost" aria-live="polite"></p>
+      <p id="rate-line" class="rate"></p>
+      <p id="source-error" class="error" hidden></p>
+    </section>
+
+    <section class="settings">
+      <div class="direction" aria-label="Currencies">
+        <label class="field">
+          <span>Home</span>
+          <input id="home-currency" class="currency-input" list="currencies" maxlength="3"
+                 autocomplete="off" autocapitalize="characters" spellcheck="false">
+        </label>
+        <label class="field">
+          <span>Foreign</span>
+          <input id="foreign-currency" class="currency-input" list="currencies" maxlength="3"
+                 autocomplete="off" autocapitalize="characters" spellcheck="false">
+        </label>
+      </div>
+      <p id="currency-error" class="error" hidden></p>
+
+      <p class="total-label source-label" id="source-label">Rate from</p>
+      <div class="segmented" role="group" aria-labelledby="source-label">
+        <button type="button" data-source="quote0">Quote 1</button>
+        <button type="button" data-source="quote1">Quote 2</button>
+        <button type="button" data-source="custom">Custom</button>
+      </div>
+
+      <div id="custom" class="card custom" hidden>
+        <div class="row" data-row="0">
+          <input class="amount" inputmode="decimal" placeholder="0" aria-label="Custom rate first amount">
+          <button type="button" class="side" aria-label="Flip currencies in custom rate"></button>
+        </div>
+        <div class="equals" aria-hidden="true">=</div>
+        <div class="row" data-row="1">
+          <input class="amount" inputmode="decimal" placeholder="0" aria-label="Custom rate second amount">
+          <button type="button" class="side" aria-label="Flip currencies in custom rate"></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <datalist id="currencies">
+    <option value="MYR"><option value="JPY"><option value="USD"><option value="SGD">
+    <option value="THB"><option value="KRW"><option value="CNY"><option value="HKD">
+    <option value="TWD"><option value="IDR"><option value="PHP"><option value="VND">
+    <option value="INR"><option value="EUR"><option value="GBP"><option value="CHF">
+    <option value="AUD"><option value="NZD"><option value="CAD"><option value="AED">
+    <option value="SAR"><option value="BND">
+  </datalist>
+
+  <script src="compare.js"></script>
+  <script src="shared.js"></script>
+  <script src="convert.js"></script>
+</body>
+</html>

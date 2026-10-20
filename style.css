@@ -231,3 +231,77 @@ button {
   color: var(--muted);
   font-size: 0.9rem;
 }
+
+/* Page navigation */
+.nav {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 4px;
+  background: var(--surface);
+  border-radius: var(--radius);
+}
+
+.nav a {
+  flex: 1;
+  padding: 8px;
+  color: var(--muted);
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+.nav a[aria-current="page"] {
+  color: var(--text);
+  background: var(--bg);
+  font-weight: 600;
+}
+
+/* Convert page */
+.price-panel {
+  padding: 14px;
+  background: var(--surface);
+  border-radius: var(--radius);
+}
+
+.price-input { font-size: 1.6rem; }
+
+.home-cost {
+  margin: 16px 0 0;
+  color: var(--accent);
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.home-cost.empty { color: var(--muted); }
+
+.settings { margin-top: 20px; }
+
+.source-label { margin: 16px 0 6px; }
+
+.segmented {
+  display: flex;
+  gap: 6px;
+}
+
+.segmented button {
+  flex: 1;
+  padding: 10px 6px;
+  color: var(--muted);
+}
+
+.segmented button[aria-pressed="true"] {
+  color: var(--text);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+.segmented button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.custom { margin-top: 12px; }

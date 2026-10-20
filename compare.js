@@ -75,11 +75,43 @@
     return { amount: amount, totals: totals, difference: Math.abs(totals[0] - totals[1]) };
   }
 
+  // Rate for the price converter: Foreign Currency per 1 Home Currency.
+  // `direction` is { give, want } from the Compare page, and the Quote's sides refer to it.
+  // Returns { ok: true, rate } or { ok: false, reason: 'currencies' | 'incomplete' }.
+  function quoteRateFor(quote, direction, home, foreign) {
+    var same = direction.give === home && direction.want === foreign;
+    var reversed = direction.give === foreign && direction.want === home;
+    if (!same && !reversed) return { ok: false, reason: 'currencies' };
+    var r = toEffectiveRate(quote);
+    if (!r.ok) return { ok: false, reason: 'incomplete' };
+    return { ok: true, rate: same ? r.rate : 1 / r.rate };
+  }
+
+  // A Custom Rate is { rows: [{ amount, side }, { amount, side }] } where side is 'home' or 'foreign'.
+  // Returns { ok: true, rate } (Foreign Currency per 1 Home Currency) or { ok: false, error }.
+  function customRate(custom) {
+    var rows = (custom && custom.rows || []).map(function (row) {
+      return { amount: row.amount, side: row.side === 'home' ? 'give' : row.side === 'foreign' ? 'want' : row.side };
+    });
+    var r = toEffectiveRate({ rows: rows });
+    return r.ok ? { ok: true, rate: r.rate } : r;
+  }
+
+  // Home Cost of a Price. Returns null when the Price is not a number more than 0.
+  function homeCost(priceText, foreignPerHome) {
+    var price = parseAmount(priceText);
+    if (isNaN(price) || price <= 0) return null;
+    return price / foreignPerHome;
+  }
+
   var api = {
     parseAmount: parseAmount,
     toEffectiveRate: toEffectiveRate,
     compareQuotes: compareQuotes,
-    totalsFor: totalsFor
+    totalsFor: totalsFor,
+    quoteRateFor: quoteRateFor,
+    customRate: customRate,
+    homeCost: homeCost
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Compare = api;

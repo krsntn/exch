@@ -1,6 +1,9 @@
 # Which Rate Is Better?
 
-A small web app that compares two currency exchange quotes and tells you which one gives you more money.
+A small web app with two pages:
+
+- **Compare** (`index.html`): compares two currency exchange quotes and tells you which one gives you more money.
+- **Convert** (`convert.html`): shows what a price in a foreign currency costs in your home currency, while you shop.
 
 ## The problem
 
@@ -20,6 +23,7 @@ You cannot compare these numbers by looking at them. This app converts both quot
 - Swap button to reverse the direction (for example, JPY back to MYR after a trip).
 - Saves your values on your device, so you can check Wise first and type the store quote later.
 - Works offline. Uses no API and sends no data to a server.
+- Converts a shop price to your home currency, using the rate from Quote 1, Quote 2, or a custom rate.
 - Dark theme. Works on phone and desktop.
 
 ## How to use
@@ -32,6 +36,16 @@ You cannot compare these numbers by looking at them. This app converts both quot
 6. Optional: in **I plan to exchange**, type your total amount (for example `6000` MYR) to see how much more you get with the better quote.
 
 Tap **Clear** to reset all values.
+
+### Convert a price while shopping
+
+1. Open **Convert** at the top of the page.
+2. Check **Home** (default MYR) and **Foreign** (default JPY).
+3. In **Rate from**, choose the rate you actually exchanged at: **Quote 1**, **Quote 2**, or **Custom**. At first, the page uses the better quote from the Compare page.
+4. For **Custom**, type the rate as you see it, for example `1000` JPY = `25.83` MYR.
+5. Type the price, for example `1500` JPY. The page shows the cost in your home currency, for example **MYR 38.74**.
+
+The page saves your currencies and rate. It does not save the price, so each item starts empty.
 
 ## Run
 
@@ -51,10 +65,13 @@ node --test
 
 | File | Content |
 | --- | --- |
-| `index.html` | The page |
+| `index.html` | The Compare page |
+| `convert.html` | The Convert page |
 | `style.css` | The styles (dark theme, responsive layout) |
-| `app.js` | The page logic and saving values on the device |
-| `compare.js` | The comparison math. It has no page code, so Node can test it. |
+| `app.js` | The Compare page logic |
+| `convert.js` | The Convert page logic |
+| `shared.js` | Saved values and number formats used by both pages |
+| `compare.js` | The rate and price math. It has no page code, so Node can test it. |
 | `compare.test.js` | Unit tests for `compare.js` |
 | `CONTEXT.md` | Glossary of the terms the project uses |
 

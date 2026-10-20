@@ -2,37 +2,7 @@
 (function () {
   'use strict';
 
-  var STORAGE_KEY = 'exch:v1';
-
-  // Quote 1 starts give-first (MYR 1000 = JPY ?). Quote 2 starts want-first, like a store board (JPY 1000 = MYR ?).
-  function defaultState() {
-    return {
-      give: 'MYR',
-      want: 'JPY',
-      quotes: [
-        { rows: [{ amount: '', side: 'give' }, { amount: '', side: 'want' }] },
-        { rows: [{ amount: '', side: 'want' }, { amount: '', side: 'give' }] }
-      ],
-      exchangeAmount: ''
-    };
-  }
-
-  function load() {
-    try {
-      var saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if (saved && saved.quotes && saved.quotes.length === 2) {
-        if (typeof saved.exchangeAmount !== 'string') saved.exchangeAmount = '';
-        return saved;
-      }
-    } catch (e) { /* storage blocked or corrupt: use defaults */ }
-    return defaultState();
-  }
-
-  function save() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }
-  }
-
-  var state = load();
+  var state = Shared.loadCompare();
 
   var giveInput = document.getElementById('give-currency');
   var wantInput = document.getElementById('want-currency');
@@ -47,10 +17,8 @@
   function code(side) { return side === 'give' ? state.give : state.want; }
   function quoteName(i) { return 'Quote ' + (i + 1); }
 
-  function fmtRate(n) { return n.toLocaleString(undefined, { maximumSignificantDigits: 6 }); }
-  function fmtMoney(n) {
-    return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  }
+  var fmtRate = Shared.fmtRate;
+  var fmtMoney = Shared.fmtMoney;
   function fmtPercent(p) { return p < 0.01 ? '<0.01%' : p.toFixed(2) + '%'; }
 
   // Writes state into the inputs. Called on start and after Swap or Clear, not on each keystroke.
@@ -157,16 +125,14 @@
     totalEl.appendChild(diff);
   }
 
-  function update() { save(); render(); }
-
-  function normalizeCode(value) { return value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 3); }
+  function update() { Shared.saveCompare(state); render(); }
 
   giveInput.addEventListener('input', function () {
-    giveInput.value = state.give = normalizeCode(giveInput.value);
+    giveInput.value = state.give = Shared.normalizeCode(giveInput.value);
     update();
   });
   wantInput.addEventListener('input', function () {
-    wantInput.value = state.want = normalizeCode(wantInput.value);
+    wantInput.value = state.want = Shared.normalizeCode(wantInput.value);
     update();
   });
 
@@ -202,7 +168,7 @@
   });
 
   document.getElementById('clear').addEventListener('click', function () {
-    state = defaultState();
+    state = Shared.defaultCompare();
     fillInputs();
     update();
   });

@@ -28,6 +28,30 @@ _Avoid_: Base amount
 The total amount of Give Currency the user plans to exchange. Each Quote's Effective Rate is applied to it to show the full Difference in Want Currency.
 _Avoid_: Total, budget
 
+**Home Currency**:
+The currency the user thinks in, used to show what a Price costs them (for example MYR). Set on the price converter, separate from the Direction.
+_Avoid_: Local currency, base currency
+
+**Foreign Currency**:
+The currency a Price is written in while shopping abroad (for example JPY).
+_Avoid_: Target currency, local currency
+
+**Price**:
+An amount in Foreign Currency the user sees on an item.
+_Avoid_: Cost, amount
+
+**Home Cost**:
+What a Price costs in Home Currency at the chosen rate.
+_Avoid_: Converted price, local price
+
+**Rate Source**:
+Where the price converter takes its rate from: Quote 1, Quote 2, or a Custom Rate the user types.
+_Avoid_: Rate mode, rate option
+
+**Custom Rate**:
+A rate the user types directly on the price converter, not taken from a Quote. It is written like a Quote: two amounts in Home Currency and Foreign Currency, in any direction.
+_Avoid_: Manual rate, override
+
 **Better Quote**:
 The Quote that gives the user more of the currency they want for the same amount of the currency they give.
 _Avoid_: Best rate, cheaper rate
