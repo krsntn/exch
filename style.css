@@ -189,12 +189,12 @@ button {
   font-size: 0.85rem;
 }
 
+/* A currency label before an amount, so it reads like the results: code first (MYR 6,000). */
 .unit {
-  width: 72px;
   flex: none;
   align-self: center;
+  font-size: 1.1rem;
   font-weight: 600;
-  text-align: center;
 }
 
 .totals {
@@ -265,6 +265,8 @@ button {
 }
 
 .price-input { font-size: 1.6rem; }
+
+.price-panel .unit { font-size: 1.3rem; }
 
 .home-cost {
   margin: 16px 0 0;
