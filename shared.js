@@ -40,8 +40,6 @@
   // The Custom Rate starts like a store board (JPY 1000 = MYR ?).
   function defaultConvert() {
     return {
-      home: 'MYR',
-      foreign: 'JPY',
       source: null,
       custom: { rows: [{ amount: '', side: 'foreign' }, { amount: '', side: 'home' }] }
     };

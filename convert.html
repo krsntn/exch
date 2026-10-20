@@ -32,20 +32,6 @@
     </section>
 
     <section class="settings">
-      <div class="direction" aria-label="Currencies">
-        <label class="field">
-          <span>Home</span>
-          <input id="home-currency" class="currency-input" maxlength="3"
-                 autocomplete="off" autocapitalize="characters" spellcheck="false">
-        </label>
-        <label class="field">
-          <span>Foreign</span>
-          <input id="foreign-currency" class="currency-input" maxlength="3"
-                 autocomplete="off" autocapitalize="characters" spellcheck="false">
-        </label>
-      </div>
-      <p id="currency-error" class="error" hidden></p>
-
       <p class="total-label source-label" id="source-label">Rate from</p>
       <div class="segmented" role="group" aria-labelledby="source-label">
         <button type="button" data-source="quote0">Quote 1</button>
@@ -69,7 +55,6 @@
 
   <script src="compare.js"></script>
   <script src="shared.js"></script>
-  <script src="currency-picker.js"></script>
   <script src="convert.js"></script>
 </body>
 </html>

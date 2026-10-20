@@ -29,11 +29,11 @@ The total amount of Give Currency the user plans to exchange. Each Quote's Effec
 _Avoid_: Total, budget
 
 **Home Currency**:
-The currency the user thinks in, used to show what a Price costs them (for example MYR). Set on the price converter, separate from the Direction.
+The currency the user thinks in, used to show what a Price costs them (for example MYR). It is always the Give Currency of the Direction.
 _Avoid_: Local currency, base currency
 
 **Foreign Currency**:
-The currency a Price is written in while shopping abroad (for example JPY).
+The currency a Price is written in while shopping abroad (for example JPY). It is always the Want Currency of the Direction.
 _Avoid_: Target currency, local currency
 
 **Price**:

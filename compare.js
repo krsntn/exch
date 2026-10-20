@@ -75,18 +75,6 @@
     return { amount: amount, totals: totals, difference: Math.abs(totals[0] - totals[1]) };
   }
 
-  // Rate for the price converter: Foreign Currency per 1 Home Currency.
-  // `direction` is { give, want } from the Compare page, and the Quote's sides refer to it.
-  // Returns { ok: true, rate } or { ok: false, reason: 'currencies' | 'incomplete' }.
-  function quoteRateFor(quote, direction, home, foreign) {
-    var same = direction.give === home && direction.want === foreign;
-    var reversed = direction.give === foreign && direction.want === home;
-    if (!same && !reversed) return { ok: false, reason: 'currencies' };
-    var r = toEffectiveRate(quote);
-    if (!r.ok) return { ok: false, reason: 'incomplete' };
-    return { ok: true, rate: same ? r.rate : 1 / r.rate };
-  }
-
   // A Custom Rate is { rows: [{ amount, side }, { amount, side }] } where side is 'home' or 'foreign'.
   // Returns { ok: true, rate } (Foreign Currency per 1 Home Currency) or { ok: false, error }.
   function customRate(custom) {
@@ -109,7 +97,6 @@
     toEffectiveRate: toEffectiveRate,
     compareQuotes: compareQuotes,
     totalsFor: totalsFor,
-    quoteRateFor: quoteRateFor,
     customRate: customRate,
     homeCost: homeCost
   };

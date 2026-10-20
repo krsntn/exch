@@ -39,13 +39,12 @@ Tap **Clear** to reset all values.
 
 ### Convert a price while shopping
 
-1. Open **Convert** at the top of the page.
-2. Check **Home** (default MYR) and **Foreign** (default JPY).
-3. In **Rate from**, choose the rate you actually exchanged at: **Quote 1**, **Quote 2**, or **Custom**. At first, the page uses the better quote from the Compare page.
-4. For **Custom**, type the rate as you see it, for example `1000` JPY = `25.83` MYR.
-5. Type the price, for example `1500` JPY. The page shows the cost in your home currency, for example **MYR 38.74**.
+1. Open **Convert** at the top of the page. It uses the currencies from the Compare page: **I give** is your home currency, and **I want** is the foreign currency.
+2. In **Rate from**, choose the rate you actually exchanged at: **Quote 1**, **Quote 2**, or **Custom**. At first, the page uses the better quote from the Compare page.
+3. For **Custom**, type the rate as you see it, for example `1000` JPY = `25.83` MYR.
+4. Type the price, for example `1500` JPY. The page shows the cost in your home currency, for example **MYR 38.74**.
 
-The page saves your currencies and rate. It does not save the price, so each item starts empty.
+The page saves your rate choice. It does not save the price, so each item starts empty.
 
 ## Run
 

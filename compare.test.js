@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
-  parseAmount, toEffectiveRate, compareQuotes, totalsFor, quoteRateFor, customRate, homeCost
+  parseAmount, toEffectiveRate, compareQuotes, totalsFor, customRate, homeCost
 } = require('./compare.js');
 
 const quote = (a, b) => ({ rows: [a, b] });
@@ -92,27 +92,6 @@ test('Exchange Amount that is empty, zero or not a number gives no totals', () =
   assert.equal(totalsFor([1, 2], ''), null);
   assert.equal(totalsFor([1, 2], '0'), null);
   assert.equal(totalsFor([1, 2], 'abc'), null);
-});
-
-test('Quote rate for the price converter: same Direction as Home -> Foreign', () => {
-  const wise = quote(give('1000'), want('38721'));
-  const r = quoteRateFor(wise, { give: 'MYR', want: 'JPY' }, 'MYR', 'JPY');
-  assert.equal(r.ok, true);
-  assert.equal(r.rate, 38.721);
-});
-
-test('Quote rate for the price converter: reversed Direction is turned around', () => {
-  // Compare page set to give JPY, want MYR. Quote: JPY 38721 = MYR 1000.
-  const q = quote(give('38721'), want('1000'));
-  const r = quoteRateFor(q, { give: 'JPY', want: 'MYR' }, 'MYR', 'JPY');
-  assert.ok(Math.abs(r.rate - 38.721) < 1e-9);
-});
-
-test('Quote rate for the price converter: other currencies or incomplete Quote are not available', () => {
-  const q = quote(give('1000'), want('38721'));
-  assert.deepEqual(quoteRateFor(q, { give: 'SGD', want: 'THB' }, 'MYR', 'JPY'), { ok: false, reason: 'currencies' });
-  const empty = quote(give(''), want('38721'));
-  assert.deepEqual(quoteRateFor(empty, { give: 'MYR', want: 'JPY' }, 'MYR', 'JPY'), { ok: false, reason: 'incomplete' });
 });
 
 test('Custom Rate written as a store board: JPY 1000 = MYR 25.83', () => {
