@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111317">
+  <title>Which Rate Wins</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <header class="top">
+      <h1>Which rate is better?</h1>
+      <button id="clear" type="button" class="clear">Clear</button>
+    </header>
+
+    <section class="direction" aria-label="Direction">
+      <label class="field">
+        <span>I give</span>
+        <input id="give-currency" class="currency-input" list="currencies" maxlength="3"
+               autocomplete="off" autocapitalize="characters" spellcheck="false">
+      </label>
+      <button id="swap" type="button" class="swap" aria-label="Swap give and want currencies">⇄</button>
+      <label class="field">
+        <span>I want</span>
+        <input id="want-currency" class="currency-input" list="currencies" maxlength="3"
+               autocomplete="off" autocapitalize="characters" spellcheck="false">
+      </label>
+    </section>
+    <p id="direction-error" class="error" hidden></p>
+
+    <p class="hint">Type each quote exactly as you see it. Tap a currency to flip it.</p>
+
+    <section class="quotes">
+      <article class="card" data-quote="0">
+        <h2 class="name">Quote 1</h2>
+        <div class="row" data-row="0">
+          <input class="amount" inputmode="decimal" placeholder="0" aria-label="Quote 1 first amount">
+          <button type="button" class="side" aria-label="Flip currencies in Quote 1"></button>
+        </div>
+        <div class="equals" aria-hidden="true">=</div>
+        <div class="row" data-row="1">
+          <input class="amount" inputmode="decimal" placeholder="0" aria-label="Quote 1 second amount">
+          <button type="button" class="side" aria-label="Flip currencies in Quote 1"></button>
+        </div>
+        <p class="rate"></p>
+        <p class="error" hidden></p>
+      </article>
+
+      <article class="card" data-quote="1">
+        <h2 class="name">Quote 2</h2>
+        <div class="row" data-row="0">
+          <input class="amount" inputmode="decimal" placeholder="0" aria-label="Quote 2 first amount">
+          <button type="button" class="side" aria-label="Flip currencies in Quote 2"></button>
+        </div>
+        <div class="equals" aria-hidden="true">=</div>
+        <div class="row" data-row="1">
+          <input class="amount" inputmode="decimal" placeholder="0" aria-label="Quote 2 second amount">
+          <button type="button" class="side" aria-label="Flip currencies in Quote 2"></button>
+        </div>
+        <p class="rate"></p>
+        <p class="error" hidden></p>
+      </article>
+    </section>
+
+    <section id="result" class="result" aria-live="polite"></section>
+
+    <section class="total">
+      <label for="exchange-amount" class="total-label">I plan to exchange</label>
+      <div class="row">
+        <input id="exchange-amount" class="amount" inputmode="decimal" placeholder="0">
+        <span id="exchange-currency" class="unit"></span>
+      </div>
+      <p id="exchange-error" class="error" hidden></p>
+      <div id="total-result" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <datalist id="currencies">
+    <option value="MYR"><option value="JPY"><option value="USD"><option value="SGD">
+    <option value="THB"><option value="KRW"><option value="CNY"><option value="HKD">
+    <option value="TWD"><option value="IDR"><option value="PHP"><option value="VND">
+    <option value="INR"><option value="EUR"><option value="GBP"><option value="CHF">
+    <option value="AUD"><option value="NZD"><option value="CAD"><option value="AED">
+    <option value="SAR"><option value="BND">
+  </datalist>
+
+  <script src="compare.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
