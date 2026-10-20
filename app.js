@@ -17,7 +17,6 @@
   function code(side) { return side === 'give' ? state.give : state.want; }
   function quoteName(i) { return 'Quote ' + (i + 1); }
 
-  var fmtRate = Shared.fmtRate;
   var fmtMoney = Shared.fmtMoney;
   function fmtPercent(p) { return p < 0.01 ? '<0.01%' : p.toFixed(2) + '%'; }
 
@@ -55,7 +54,7 @@
 
       var own = Compare.toEffectiveRate(state.quotes[i]);
       rateEl.textContent = directionOk && own.ok
-        ? '1 ' + state.give + ' = ' + fmtRate(own.rate) + ' ' + state.want
+        ? Shared.fmtRateLine(state.give, own.rate, state.want)
         : '';
       // Show a card's error only after the user starts typing in that card.
       errorEl.hidden = !(error && hasInput);
@@ -75,7 +74,7 @@
 
     if (result.status === 'same') {
       verdict.textContent = 'Same rate';
-      detail.textContent = 'Both quotes give 1 ' + state.give + ' = ' + fmtRate(result.rates[0]) + ' ' + state.want + '.';
+      detail.textContent = 'Both quotes give ' + Shared.fmtRateLine(state.give, result.rates[0], state.want) + '.';
     } else {
       var winner = quoteName(result.winner);
       verdict.classList.add('win');

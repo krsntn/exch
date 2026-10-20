@@ -23,26 +23,28 @@ You cannot compare these numbers by looking at them. This app converts both quot
 - Swap button to reverse the direction (for example, JPY back to MYR after a trip).
 - Saves your values on your device, so you can check Wise first and type the store quote later.
 - Works offline. Uses no API and sends no data to a server.
-- Converts a shop price to your home currency, using the rate from Quote 1, Quote 2, or a custom rate.
+- Converts a shop price to your home currency, using the rate from Quote 1, Quote 2, or a rate you type.
 - Dark theme. Works on phone and desktop.
 
 ## How to use
 
 1. Set **I give** and **I want** (default: MYR → JPY).
-2. In **Quote 1**, type the first quote. Example: `1000` MYR = `38721` JPY.
-3. In **Quote 2**, type the second quote as the store shows it. Example: `1000` JPY = `25.83` MYR.
+2. In **Quote 1**, type the first quote. Example: MYR `1000` = JPY `38721`.
+3. In **Quote 2**, type the second quote as the store shows it. Example: JPY `1000` = MYR `25.83`.
 4. If a quote uses the opposite order, tap a currency label to flip it.
 5. Read the result. The better quote has a green border.
-6. Optional: in **I plan to exchange**, type your total amount (for example `6000` MYR) to see how much more you get with the better quote.
+6. Optional: in **I plan to exchange**, type your total amount (for example MYR `6000`) to see how much more you get with the better quote.
 
 Tap **Clear** to reset all values.
 
 ### Convert a price while shopping
 
 1. Open **Convert** at the top of the page. It uses the currencies from the Compare page: **I give** is your home currency, and **I want** is the foreign currency.
-2. In **Rate from**, choose the rate you actually exchanged at: **Quote 1**, **Quote 2**, or **Custom**. At first, the page uses the better quote from the Compare page.
-3. For **Custom**, type the rate as you see it, for example `1000` JPY = `25.83` MYR.
-4. Type the price, for example `1500` JPY. The page shows the cost in your home currency, for example **MYR 38.74**.
+2. In **Rate from**, choose the rate you actually exchanged at. At first, the page uses the better quote from the Compare page.
+   - **Quote 1** or **Quote 2**: the rate from the Compare page.
+   - **Rate**: type one number, for example MYR 1 = JPY `38.72`. Tap the currency to switch to JPY 1 = MYR ….
+   - **Amounts**: type two amounts as you see them, for example JPY `1000` = MYR `25.83`.
+4. Type the price, for example JPY `1500`. The page shows the cost in your home currency, for example **MYR 38.74**.
 
 The page saves your rate choice. It does not save the price, so each item starts empty.
 

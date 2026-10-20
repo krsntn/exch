@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
-  parseAmount, toEffectiveRate, compareQuotes, totalsFor, customRate, homeCost
+  parseAmount, toEffectiveRate, compareQuotes, totalsFor, amountPairRate, singleRate, flipSingleRate, homeCost
 } = require('./compare.js');
 
 const quote = (a, b) => ({ rows: [a, b] });
@@ -94,11 +94,11 @@ test('Exchange Amount that is empty, zero or not a number gives no totals', () =
   assert.equal(totalsFor([1, 2], 'abc'), null);
 });
 
-test('Custom Rate written as a store board: JPY 1000 = MYR 25.83', () => {
-  const r = customRate({ rows: [{ amount: '1000', side: 'foreign' }, { amount: '25.83', side: 'home' }] });
+test('Amount Pair written as a store board: JPY 1000 = MYR 25.83', () => {
+  const r = amountPairRate({ rows: [{ amount: '1000', side: 'foreign' }, { amount: '25.83', side: 'home' }] });
   assert.equal(r.ok, true);
   assert.ok(Math.abs(r.rate - 38.71467) < 1e-5);
-  const bad = customRate({ rows: [{ amount: '1000', side: 'foreign' }, { amount: '', side: 'home' }] });
+  const bad = amountPairRate({ rows: [{ amount: '1000', side: 'foreign' }, { amount: '', side: 'home' }] });
   assert.equal(bad.ok, false);
   assert.equal(bad.error, 'Enter both amounts.');
 });
@@ -108,4 +108,32 @@ test('Home Cost: JPY 1,500 at 1 MYR = 38.721 JPY is about MYR 38.74', () => {
   assert.equal(homeCost('', 38.721), null);
   assert.equal(homeCost('0', 38.721), null);
   assert.equal(homeCost('abc', 38.721), null);
+});
+
+test('Single Rate: 1 MYR = 38.72 JPY and 1 JPY = 0.0258 MYR both give Foreign per Home', () => {
+  assert.deepEqual(singleRate({ value: '38.72', base: 'home' }), { ok: true, rate: 38.72 });
+  const r = singleRate({ value: '0.025826', base: 'foreign' });
+  assert.equal(r.ok, true);
+  assert.ok(Math.abs(r.rate - 38.7207) < 1e-4);
+});
+
+test('Single Rate that is empty, zero or not a number is not valid', () => {
+  assert.deepEqual(singleRate({ value: '', base: 'home' }), { ok: false, error: 'Enter the rate.' });
+  assert.deepEqual(singleRate({ value: '0', base: 'home' }), { ok: false, error: 'Rate must be more than 0.' });
+  assert.deepEqual(singleRate({ value: 'abc', base: 'home' }), { ok: false, error: 'Enter the rate.' });
+});
+
+test('flipping a Single Rate keeps its meaning: 1 MYR = 38.72 JPY becomes 1 JPY = 0.0258264 MYR', () => {
+  const once = flipSingleRate({ value: '38.72', base: 'home' });
+  assert.deepEqual(once, { value: '0.0258264', base: 'foreign', from: '38.72' });
+  // A rate that is not valid keeps its text; only the base changes.
+  assert.deepEqual(flipSingleRate({ value: '', base: 'home' }), { value: '', base: 'foreign' });
+});
+
+test('flipping a Single Rate twice without an edit gives back the exact text', () => {
+  for (const text of ['38.72', '7', '0.0258', '1,234.5']) {
+    const twice = flipSingleRate(flipSingleRate({ value: text, base: 'home' }));
+    assert.equal(twice.value, text);
+    assert.equal(twice.base, 'home');
+  }
 });

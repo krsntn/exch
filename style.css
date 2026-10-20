@@ -306,7 +306,14 @@ button {
   cursor: not-allowed;
 }
 
-.custom { margin-top: 12px; }
+.source-card { margin-top: 12px; }
+
+/* Single Rate: [MYR] 1 = JPY [38.72] */
+.rate-row { align-items: center; }
+.rate-row .side {
+  width: 64px;
+  align-self: stretch;
+}
 
 /* Currency picker (currency-picker.js) */
 .picker { position: relative; }

@@ -36,19 +36,31 @@
     return defaultCompare();
   }
 
-  // source is null until the user picks one: 'quote0', 'quote1' or 'custom'.
-  // The Custom Rate starts like a store board (JPY 1000 = MYR ?).
+  // source is null until the user picks one: 'quote0', 'quote1', 'rate' (Single Rate) or 'amounts' (Amount Pair).
+  // The Single Rate starts as 1 Home = ? Foreign. The Amount Pair starts like a store board (JPY 1000 = MYR ?).
   function defaultConvert() {
     return {
       source: null,
-      custom: { rows: [{ amount: '', side: 'foreign' }, { amount: '', side: 'home' }] }
+      rate: { value: '', base: 'home' },
+      amounts: { rows: [{ amount: '', side: 'foreign' }, { amount: '', side: 'home' }] }
     };
   }
 
   function loadConvert() {
     var saved = read(CONVERT_KEY);
-    if (saved && saved.custom && saved.custom.rows && saved.custom.rows.length === 2) return saved;
-    return defaultConvert();
+    if (!saved || typeof saved !== 'object') return defaultConvert();
+    // Data saved before the Amount Pair was renamed from "custom".
+    if (saved.custom && !saved.amounts) saved.amounts = saved.custom;
+    if (saved.source === 'custom') saved.source = 'amounts';
+    delete saved.custom;
+    // Data saved when the converter had its own currencies (now taken from the Compare page).
+    delete saved.home;
+    delete saved.foreign;
+
+    var fresh = defaultConvert();
+    if (!(saved.amounts && saved.amounts.rows && saved.amounts.rows.length === 2)) saved.amounts = fresh.amounts;
+    if (!(saved.rate && typeof saved.rate.value === 'string')) saved.rate = fresh.rate;
+    return saved;
   }
 
   function normalizeCode(value) { return value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 3); }
@@ -57,6 +69,9 @@
   function fmtMoney(n) {
     return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
+
+  // A rate in the app's "code, then number" order: MYR 1 = JPY 38.721.
+  function fmtRateLine(base, rate, other) { return base + ' 1 = ' + other + ' ' + fmtRate(rate); }
 
   root.Shared = {
     defaultCompare: defaultCompare,
@@ -67,6 +82,7 @@
     saveConvert: function (state) { write(CONVERT_KEY, state); },
     normalizeCode: normalizeCode,
     fmtRate: fmtRate,
-    fmtMoney: fmtMoney
+    fmtMoney: fmtMoney,
+    fmtRateLine: fmtRateLine
   };
 })(this);

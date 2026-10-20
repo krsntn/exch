@@ -45,12 +45,16 @@ What a Price costs in Home Currency at the chosen rate.
 _Avoid_: Converted price, local price
 
 **Rate Source**:
-Where the price converter takes its rate from: Quote 1, Quote 2, or a Custom Rate the user types.
+Where the price converter takes its rate from: Quote 1, Quote 2, a Single Rate, or an Amount Pair.
 _Avoid_: Rate mode, rate option
 
-**Custom Rate**:
-A rate the user types directly on the price converter, not taken from a Quote. It is written like a Quote: two amounts in Home Currency and Foreign Currency, in any direction.
-_Avoid_: Manual rate, override
+**Single Rate**:
+A rate the user types on the price converter as one number: 1 unit of one currency equals that many units of the other (for example MYR 1 = JPY 38.72, or JPY 1 = MYR 0.0258).
+_Avoid_: Custom rate, manual rate
+
+**Amount Pair**:
+A rate the user types on the price converter as two amounts, written like a Quote in any direction (for example JPY 1000 = MYR 25.83).
+_Avoid_: Custom rate, manual rate, override
 
 **Better Quote**:
 The Quote that gives the user more of the currency they want for the same amount of the currency they give.

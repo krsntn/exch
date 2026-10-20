@@ -36,18 +36,29 @@
       <div class="segmented" role="group" aria-labelledby="source-label">
         <button type="button" data-source="quote0">Quote 1</button>
         <button type="button" data-source="quote1">Quote 2</button>
-        <button type="button" data-source="custom">Custom</button>
+        <button type="button" data-source="rate">Rate</button>
+        <button type="button" data-source="amounts">Amounts</button>
       </div>
 
-      <div id="custom" class="card custom" hidden>
+      <div id="rate" class="card source-card" hidden>
+        <div class="row rate-row">
+          <button type="button" class="side" id="rate-base" aria-label="Flip the rate"></button>
+          <span class="unit">1</span>
+          <span class="unit" aria-hidden="true">=</span>
+          <span class="unit" id="rate-other"></span>
+          <input id="rate-value" class="amount" inputmode="decimal" placeholder="0" aria-label="Rate">
+        </div>
+      </div>
+
+      <div id="amounts" class="card source-card" hidden>
         <div class="row" data-row="0">
-          <input class="amount" inputmode="decimal" placeholder="0" aria-label="Custom rate first amount">
-          <button type="button" class="side" aria-label="Flip currencies in custom rate"></button>
+          <button type="button" class="side" aria-label="Flip currencies"></button>
+          <input class="amount" inputmode="decimal" placeholder="0" aria-label="First amount">
         </div>
         <div class="equals" aria-hidden="true">=</div>
         <div class="row" data-row="1">
-          <input class="amount" inputmode="decimal" placeholder="0" aria-label="Custom rate second amount">
-          <button type="button" class="side" aria-label="Flip currencies in custom rate"></button>
+          <button type="button" class="side" aria-label="Flip currencies"></button>
+          <input class="amount" inputmode="decimal" placeholder="0" aria-label="Second amount">
         </div>
       </div>
     </section>

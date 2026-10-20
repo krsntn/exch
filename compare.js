@@ -75,14 +75,34 @@
     return { amount: amount, totals: totals, difference: Math.abs(totals[0] - totals[1]) };
   }
 
-  // A Custom Rate is { rows: [{ amount, side }, { amount, side }] } where side is 'home' or 'foreign'.
+  // An Amount Pair is { rows: [{ amount, side }, { amount, side }] } where side is 'home' or 'foreign'.
   // Returns { ok: true, rate } (Foreign Currency per 1 Home Currency) or { ok: false, error }.
-  function customRate(custom) {
-    var rows = (custom && custom.rows || []).map(function (row) {
+  function amountPairRate(pair) {
+    var rows = (pair && pair.rows || []).map(function (row) {
       return { amount: row.amount, side: row.side === 'home' ? 'give' : row.side === 'foreign' ? 'want' : row.side };
     });
     var r = toEffectiveRate({ rows: rows });
     return r.ok ? { ok: true, rate: r.rate } : r;
+  }
+
+  // A Single Rate is { value, base }: 1 unit of the base currency ('home' or 'foreign') = value units of the other.
+  // Returns { ok: true, rate } (Foreign Currency per 1 Home Currency) or { ok: false, error }.
+  function singleRate(rate) {
+    var value = parseAmount(rate.value);
+    if (isNaN(value)) return { ok: false, error: 'Enter the rate.' };
+    if (value <= 0) return { ok: false, error: 'Rate must be more than 0.' };
+    return { ok: true, rate: rate.base === 'home' ? value : 1 / value };
+  }
+
+  // Swaps the base currency of a Single Rate and turns the value around, so the rate keeps its meaning.
+  // The result keeps the text before the flip in `from`. Flipping back without an edit returns that text exactly,
+  // because rounding 1/x twice does not always give back x. The page removes `from` when the user edits the value.
+  function flipSingleRate(rate) {
+    var base = rate.base === 'home' ? 'foreign' : 'home';
+    if (typeof rate.from === 'string') return { value: rate.from, base: base, from: rate.value };
+    var value = parseAmount(rate.value);
+    if (isNaN(value) || value <= 0) return { value: rate.value, base: base };
+    return { value: String(Number((1 / value).toPrecision(6))), base: base, from: rate.value };
   }
 
   // Home Cost of a Price. Returns null when the Price is not a number more than 0.
@@ -97,7 +117,9 @@
     toEffectiveRate: toEffectiveRate,
     compareQuotes: compareQuotes,
     totalsFor: totalsFor,
-    customRate: customRate,
+    amountPairRate: amountPairRate,
+    singleRate: singleRate,
+    flipSingleRate: flipSingleRate,
     homeCost: homeCost
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

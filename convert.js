@@ -1,10 +1,12 @@
-// Convert page: shows the Home Cost of a Price, using a rate from a Compare page Quote or a Custom Rate.
+// Convert page: shows the Home Cost of a Price, using a rate from a Compare page Quote, a Single Rate or an Amount Pair.
 // Home Currency is the Compare page Give Currency; Foreign Currency is its Want Currency.
 (function () {
   'use strict';
 
   var state = Shared.loadConvert();
   var price = ''; // Not saved: each item starts empty.
+
+  var SOURCE_NAMES = { quote0: 'Quote 1', quote1: 'Quote 2', rate: 'Rate', amounts: 'Amounts' };
 
   var priceInput = document.getElementById('price');
   var priceCurrency = document.getElementById('price-currency');
@@ -13,34 +15,41 @@
   var rateLine = document.getElementById('rate-line');
   var sourceError = document.getElementById('source-error');
   var sourceButtons = Array.prototype.slice.call(document.querySelectorAll('[data-source]'));
-  var customEl = document.getElementById('custom');
-  var customRows = Array.prototype.slice.call(customEl.querySelectorAll('.row'));
-
-  function sourceName(source) { return source === 'custom' ? 'Custom' : 'Quote ' + (Number(source.slice(-1)) + 1); }
+  var rateEl = document.getElementById('rate');
+  var rateBase = document.getElementById('rate-base');
+  var rateValue = document.getElementById('rate-value');
+  var rateOther = document.getElementById('rate-other');
+  var amountsEl = document.getElementById('amounts');
+  var amountRows = Array.prototype.slice.call(amountsEl.querySelectorAll('.row'));
 
   function showError(el, message) {
     el.hidden = !message;
     el.textContent = message || '';
   }
 
-  // Until the user picks a Rate Source, use the Better Quote from the Compare page, or Custom when it has none.
+  // Until the user picks a Rate Source, use the Better Quote from the Compare page, or Rate when it has none.
   function defaultSource(compare, quoteRates) {
     var result = Compare.compareQuotes(compare.quotes[0], compare.quotes[1]);
     var winner = result.status === 'better' ? result.winner : result.status === 'same' ? 0 : -1;
-    return winner >= 0 && quoteRates[winner].ok ? 'quote' + winner : 'custom';
+    return winner >= 0 && quoteRates[winner].ok ? 'quote' + winner : 'rate';
   }
 
-  // Returns { rate } or { error } for the chosen Rate Source.
+  // Returns { rate } or { error } for the chosen Rate Source. An empty typed source asks for input, not an error.
   function chosenRate(source, quoteRates) {
-    if (source === 'custom') {
-      var custom = Compare.customRate(state.custom);
-      if (custom.ok) return { rate: custom.rate };
-      var typed = state.custom.rows.some(function (r) { return r.amount.trim() !== ''; });
-      return { error: typed ? custom.error : 'Enter your rate below.' };
+    var r;
+    if (source === 'rate') {
+      r = Compare.singleRate(state.rate);
+      if (r.ok) return { rate: r.rate };
+      return { error: state.rate.value.trim() ? r.error : 'Enter your rate below.' };
     }
-    var i = Number(source.slice(-1));
-    var q = quoteRates[i];
-    return q.ok ? { rate: q.rate } : { error: sourceName(source) + ' is not complete on the Compare page.' };
+    if (source === 'amounts') {
+      r = Compare.amountPairRate(state.amounts);
+      if (r.ok) return { rate: r.rate };
+      var typed = state.amounts.rows.some(function (row) { return row.amount.trim() !== ''; });
+      return { error: typed ? r.error : 'Enter your rate below.' };
+    }
+    r = quoteRates[Number(source.slice(-1))];
+    return r.ok ? { rate: r.rate } : { error: SOURCE_NAMES[source] + ' is not complete on the Compare page.' };
   }
 
   function render() {
@@ -48,6 +57,7 @@
     var compare = Shared.loadCompare();
     var home = compare.give;
     var foreign = compare.want;
+    function code(side) { return (side === 'home' ? home : foreign) || '—'; }
     priceCurrency.textContent = foreign || '—';
 
     var currenciesOk = home.length > 0 && foreign.length > 0 && home !== foreign;
@@ -62,10 +72,13 @@
       btn.disabled = i < 2 && !quoteRates[i].ok && !selected;
     });
 
-    customEl.hidden = source !== 'custom';
-    customRows.forEach(function (rowEl, r) {
-      var side = state.custom.rows[r].side;
-      rowEl.querySelector('.side').textContent = (side === 'home' ? home : foreign) || '—';
+    rateEl.hidden = source !== 'rate';
+    rateBase.textContent = code(state.rate.base);
+    rateOther.textContent = code(state.rate.base === 'home' ? 'foreign' : 'home');
+
+    amountsEl.hidden = source !== 'amounts';
+    amountRows.forEach(function (rowEl, r) {
+      rowEl.querySelector('.side').textContent = code(state.amounts.rows[r].side);
     });
 
     var chosen = currenciesOk
@@ -73,7 +86,7 @@
       : { error: 'Set two different currencies on the Compare page.' };
     showError(sourceError, chosen.error);
     rateLine.textContent = chosen.rate
-      ? '1 ' + home + ' = ' + Shared.fmtRate(chosen.rate) + ' ' + foreign + ' (' + sourceName(source) + ')'
+      ? Shared.fmtRateLine(home, chosen.rate, foreign) + ' (' + SOURCE_NAMES[source] + ')'
       : '';
 
     var cost = chosen.rate ? Compare.homeCost(price, chosen.rate) : null;
@@ -85,8 +98,9 @@
 
   function update() { Shared.saveConvert(state); render(); }
 
-  customRows.forEach(function (rowEl, r) {
-    rowEl.querySelector('.amount').value = state.custom.rows[r].amount;
+  rateValue.value = state.rate.value;
+  amountRows.forEach(function (rowEl, r) {
+    rowEl.querySelector('.amount').value = state.amounts.rows[r].amount;
   });
 
   priceInput.addEventListener('input', function () {
@@ -101,14 +115,25 @@
     });
   });
 
-  customRows.forEach(function (rowEl, r) {
+  rateValue.addEventListener('input', function () {
+    state.rate = { value: rateValue.value, base: state.rate.base }; // An edit drops the text kept by the last flip.
+    update();
+  });
+  // Tapping the currency flips the Single Rate (1 MYR = 38.72 JPY <-> 1 JPY = 0.0258264 MYR).
+  rateBase.addEventListener('click', function () {
+    state.rate = Compare.flipSingleRate(state.rate);
+    rateValue.value = state.rate.value;
+    update();
+  });
+
+  amountRows.forEach(function (rowEl, r) {
     rowEl.querySelector('.amount').addEventListener('input', function (e) {
-      state.custom.rows[r].amount = e.target.value;
+      state.amounts.rows[r].amount = e.target.value;
       update();
     });
-    // A Custom Rate always has one amount per currency, so tapping either currency flips both rows.
+    // An Amount Pair always has one amount per currency, so tapping either currency flips both rows.
     rowEl.querySelector('.side').addEventListener('click', function () {
-      state.custom.rows.forEach(function (row) { row.side = row.side === 'home' ? 'foreign' : 'home'; });
+      state.amounts.rows.forEach(function (row) { row.side = row.side === 'home' ? 'foreign' : 'home'; });
       update();
     });
   });
