@@ -1,6 +1,6 @@
-# Exchange Rate Comparison
+# Exch
 
-A tool that tells a traveller, at a glance, which of two exchange quotes gives more money for the same trade, even when the quotes are written in opposite directions.
+Exch is a tool that tells a traveller, at a glance, which of two exchange quotes gives more money for the same trade, even when the quotes are written in opposite directions. It also converts a shop price to the home currency.
 
 ## Language
 
