@@ -2,10 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <script>
+    // On app launch (start_url is index.html?launch), open the page the user used last.
+    try {
+      if (/[?&]launch\b/.test(location.search) && localStorage.getItem('exch:page') === 'convert') {
+        location.replace('convert.html');
+      }
+    } catch (e) { /* storage blocked: stay on Compare */ }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#111317">
-  <title>Which Rate Wins</title>
-  <link rel="icon" href="favicon.ico">
+  <title>Exch · Compare</title>
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-title" content="Exch">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -82,6 +96,7 @@
     </section>
   </main>
 
+  <script src="pwa.js"></script>
   <script src="compare.js"></script>
   <script src="shared.js"></script>
   <script src="currency-picker.js"></script>
