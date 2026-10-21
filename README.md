@@ -1,6 +1,8 @@
-# Which Rate Is Better?
+# Exch
 
-A small web app with two pages:
+![Exch icon](icon-192.png)
+
+Exch is a small web app with two pages. You can install it on your phone or computer, and it works offline.
 
 - **Compare** (`index.html`): compares two currency exchange quotes and tells you which one gives you more money.
 - **Convert** (`convert.html`): shows what a price in a foreign currency costs in your home currency, while you shop.
@@ -22,7 +24,7 @@ You cannot compare these numbers by looking at them. This app converts both quot
 - Shows the total you get from each quote for the amount you plan to exchange.
 - Swap button to reverse the direction (for example, JPY back to MYR after a trip).
 - Saves your values on your device, so you can check Wise first and type the store quote later.
-- Works offline. Uses no API and sends no data to a server.
+- Installs as an app (PWA) and works offline. Uses no API and sends no data to a server.
 - Converts a shop price to your home currency, using the rate from Quote 1, Quote 2, or a rate you type.
 - Dark theme. Works on phone and desktop.
 
@@ -52,7 +54,41 @@ The page saves your rate choice. It does not save the price, so each item starts
 
 Open `index.html` in a browser. You do not need a build step, a server, or `npm install`.
 
-To host it, upload the files to any static host, for example GitHub Pages or Netlify.
+When you open the file directly (`file://`), the app works, but you cannot install it and it does not work offline. The browser runs the service worker only on HTTPS or `localhost`.
+
+To test install and offline on your computer, serve the folder:
+
+```sh
+python3 -m http.server 8000
+```
+
+Then open `http://localhost:8000`.
+
+To host it, upload the files to any static host with HTTPS, for example GitHub Pages or Netlify. All paths are relative, so the app works at a domain root or in a sub-folder.
+
+## Install
+
+- **Android (Chrome)**: open the menu (⋮) and tap **Install app** or **Add to Home screen**.
+- **iPhone and iPad (Safari)**: tap **Share**, then **Add to Home Screen**.
+- **Desktop (Chrome, Edge)**: click the install icon in the address bar.
+
+The installed app opens the page you used last (Compare or Convert). On Android and desktop, long-press or right-click the icon to open Compare or Convert directly.
+
+## Offline and updates
+
+The service worker (`sw.js`) keeps every app file in a cache. After the first visit, the app opens with no network.
+
+When you change any app file, change `CACHE` in `sw.js` (for example from `exch-v1` to `exch-v2`). If you do not, users keep the old files. When a user opens the app after you publish the change, the app shows **New version available**. A tap on **Reload** loads the new version. Saved values stay.
+
+If you add a new file, also add it to `FILES` in `sw.js`.
+
+## Icon
+
+`tools/make-icons.py` draws the icon and writes `icon.svg`, the PNG icons, and `favicon.ico`. To change the icon, edit the shapes in the script and run it. You need Python 3 and Pillow.
+
+```sh
+python3 tools/make-icons.py
+```
 
 ## Test
 
@@ -75,6 +111,11 @@ node --test
 | `currency-picker.js` | The currency dropdown used by every currency field |
 | `compare.js` | The rate and price math. It has no page code, so Node can test it. |
 | `compare.test.js` | Unit tests for `compare.js` |
+| `pwa.js` | Registers the service worker, shows the update bar, and saves the last page |
+| `sw.js` | The service worker: the offline cache |
+| `manifest.webmanifest` | The app name, icons, colors, and shortcuts for install |
+| `icon.svg`, `icon-*.png`, `apple-touch-icon.png`, `favicon.ico` | The app icon |
+| `tools/make-icons.py` | Makes the icon files |
 | `CONTEXT.md` | Glossary of the terms the project uses |
 
 ## Limits

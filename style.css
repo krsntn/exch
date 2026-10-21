@@ -381,3 +381,34 @@ button {
   padding: 8px 10px;
   color: var(--muted);
 }
+
+/* Update bar: shows when a new version of the app is ready (pwa.js). */
+.update-bar {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: calc(100% - 32px);
+  max-width: 728px;
+  padding: 10px 10px 10px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.update-bar span { flex: 1; }
+
+.update-bar button {
+  padding: 8px 14px;
+  background: var(--accent);
+  border: 0;
+  border-radius: var(--radius);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+body.has-update-bar main { padding-bottom: 112px; }
